@@ -424,11 +424,9 @@
   @media (max-width:900px){
     /* No hover on touch, and the shared crossfade stage doesn't really
        work as a tap target — so mobile drops the side-by-side
-       list+stage layout entirely in favour of a per-row accordion:
-       each row's own photo expands directly underneath it on tap
-       (same .is-active toggle the JS already does for the desktop
-       stage — this is just a different CSS reaction to that same
-       class). */
+       list+stage layout entirely in favour of a plain stacked list:
+       every row shows its own name, price, book button AND photo at
+       once, all the time — nothing to tap/expand, nothing dimmed. */
     .services__layout{flex-direction:column;align-items:center;justify-content:center;gap:0;}
     .services__stage{display:none;}
     .services__list{max-width:600px;width:100%;}
@@ -437,11 +435,17 @@
     .services__head{max-width:600px;padding-right:0 !important;}
     .services__title,.services__sub{text-align:center;}
     .services__sub{margin-left:auto;margin-right:auto;}
-    .services__panel{
-      display:block;max-height:0;overflow:hidden;
-      transition:max-height .5s var(--ease);
+    /* Every row reads as an already-open card, not a clickable
+       accordion trigger: full opacity regardless of hover/active state,
+       default cursor, and a moderate (not huge) gap between cards. */
+    .services__row{
+      opacity:1 !important;cursor:default;
+      padding:26px 0;
     }
-    .services__row.is-active .services__panel{max-height:480px;}
+    .services__row:first-child{padding-top:0;}
+    .services__panel{
+      display:block;max-height:none;overflow:visible;
+    }
     .services__panel img{
       display:block;width:100%;aspect-ratio:3/4;object-fit:cover;
       border-radius:12px;margin-top:20px;
