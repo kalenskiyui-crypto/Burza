@@ -451,8 +451,8 @@
   }
   .services__meta{display:inline-flex;align-items:baseline;flex-shrink:0;}
   .services__price{
-    font-weight:300;font-size:clamp(1rem,2vw,1.3rem);letter-spacing:-0.01em;
-    color:var(--mute-on-dark);white-space:nowrap;
+    font-weight:300;font-size:clamp(1.6rem,3.4vw,2.6rem);letter-spacing:-0.01em;
+    line-height:1.1;color:var(--mute-on-dark);white-space:nowrap;
   }
   .services__book{
     font-size:.74rem;font-weight:600;letter-spacing:var(--tracking-wide);text-transform:uppercase;
@@ -555,6 +555,11 @@
     position:absolute;top:0;left:0;
     height:100svh;width:100%;overflow:hidden;
     background:var(--ink);
+  }
+  /* The clip window lives on this inner wrapper (not on the pin) so the
+     slogan, a sibling, is never clipped and stays visible at any size. */
+  .scrollhero__clip{
+    position:absolute;inset:0;overflow:hidden;
     clip-path:polygon(25% 25%, 75% 25%, 75% 75%, 25% 75%);
   }
   .scrollhero__video{
@@ -564,22 +569,19 @@
   }
   .scrollhero__slogan{
     position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-    width:90%;margin:0;text-align:center;z-index:2;pointer-events:none;
+    width:90%;max-width:900px;margin:0;text-align:center;z-index:2;pointer-events:none;
     font-family:'Bebas Neue','Google Sans Flex','Archivo',system-ui,sans-serif;
     font-weight:400;font-size:clamp(2.6rem,6vw,5.5rem);letter-spacing:0.01em;
     line-height:0.95;color:var(--paper);text-shadow:0 2px 24px rgba(0,0,0,.45);
-    opacity:0;
   }
   @media (max-width:640px){
     .scrollhero{height:calc(1000px + 100svh);}
     .scrollhero__slogan{font-size:2.6rem;}
   }
   @media (prefers-reduced-motion: reduce){
-    .scrollhero__slogan{opacity:1;}
-  }
-  @media (prefers-reduced-motion: reduce){
     .scrollhero{height:auto;}
-    .scrollhero__pin{position:relative;height:100svh;clip-path:none !important;}
+    .scrollhero__pin{position:relative;height:100svh;}
+    .scrollhero__clip{clip-path:none !important;}
     .scrollhero__video{transform:scale(1) !important;}
   }
 
@@ -861,10 +863,12 @@
 
     <section class="scrollhero" id="scrollHero">
       <div class="scrollhero__pin" id="scrollHeroPin">
-        <video class="scrollhero__video" id="scrollHeroVideo" muted loop playsinline preload="metadata" poster="images/services-reveal-poster.jpg">
-          <source src="videos/services-reveal.mp4" type="video/mp4">
-        </video>
-        <p class="scrollhero__slogan" id="scrollHeroSlogan"><span data-i18n="sloganLine1">Twój styl.</span><br><span data-i18n="sloganLine2">Twój czas.</span><br><span data-i18n="sloganLine3">Umów się dziś.</span></p>
+        <div class="scrollhero__clip" id="scrollHeroClip">
+          <video class="scrollhero__video" id="scrollHeroVideo" muted loop playsinline preload="metadata" poster="images/services-reveal-poster.jpg">
+            <source src="videos/services-reveal.mp4" type="video/mp4">
+          </video>
+        </div>
+        <p class="scrollhero__slogan" data-i18n="slogan">Umów wizytę i wyjdź jak nowy.</p>
       </div>
     </section>
 
@@ -912,9 +916,7 @@
       navBook: "Umów wizytę",
       heroTitleLine1: "TOP barber shop",
       heroTitleLine2: "w Szczecinie",
-      sloganLine1: "Twój styl.",
-      sloganLine2: "Twój czas.",
-      sloganLine3: "Umów się dziś.",
+      slogan: "Umów wizytę i wyjdź jak nowy.",
       instagramCta: "Obserwuj na Instagramie",
       servicesTitle: "Nasze usługi",
       servicesSub: "Od precyzyjnych fade'ów po pełne combo grooming — każde strzyżenie wykonane z dbałością o to, jak chcesz wyglądać.",
@@ -1515,8 +1517,8 @@
     var section = document.getElementById("scrollHero");
     var pin = document.getElementById("scrollHeroPin");
     var video = document.getElementById("scrollHeroVideo");
-    var slogan = document.getElementById("scrollHeroSlogan");
-    if (!section || !pin || reduceMotion) return;
+    var clipEl = document.getElementById("scrollHeroClip");
+    if (!section || !pin || !clipEl || reduceMotion) return;
 
     if (video){
       if ("IntersectionObserver" in window){
@@ -1560,15 +1562,12 @@
       var clipT = clamp(y / travel, 0, 1);
       var clipStart = INITIAL_CLIP + (0 - INITIAL_CLIP) * clipT;
       var clipEnd = FINAL_CLIP + (100 - FINAL_CLIP) * clipT;
-      pin.style.clipPath =
+      clipEl.style.clipPath =
         "polygon(" +
         clipStart + "% " + clipStart + "%, " +
         clipEnd + "% " + clipStart + "%, " +
         clipEnd + "% " + clipEnd + "%, " +
         clipStart + "% " + clipEnd + "%)";
-
-      // Slogan fades in once the clip window is wide enough to hold it.
-      if (slogan) slogan.style.opacity = clamp((clipT - 0.45) / 0.35, 0, 1);
 
       var zoomT = clamp(y / (travel + ZOOM_EXTRA), 0, 1);
       var scale = 1.7 + (1 - 1.7) * zoomT;
