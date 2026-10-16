@@ -446,13 +446,15 @@
   .services__row:hover,
   .services__row:focus-visible{opacity:1;}
   .services__name{
-    font-weight:300;font-size:clamp(1.6rem,3.4vw,2.6rem);letter-spacing:-0.01em;
-    line-height:1.1;
+    font-family:'Bebas Neue','Google Sans Flex','Archivo',system-ui,sans-serif;
+    font-weight:400;font-size:clamp(2.2rem,3.9vw,3.3rem);letter-spacing:0.01em;
+    line-height:1;
   }
   .services__meta{display:inline-flex;align-items:center;flex-shrink:0;}
   .services__price{
-    font-weight:300;font-size:clamp(1.6rem,3.4vw,2.6rem);letter-spacing:-0.01em;
-    line-height:1.1;color:var(--mute-on-dark);white-space:nowrap;
+    font-family:'Bebas Neue','Google Sans Flex','Archivo',system-ui,sans-serif;
+    font-weight:400;font-size:clamp(2.2rem,3.9vw,3.3rem);letter-spacing:0.01em;
+    line-height:1;color:var(--mute-on-dark);white-space:nowrap;
   }
   .services__book{
     font-size:.95rem;font-weight:600;letter-spacing:var(--tracking-wide);text-transform:uppercase;
@@ -500,7 +502,7 @@
        default cursor, and a moderate (not huge) gap between cards. */
     .services__row{
       opacity:1 !important;cursor:default;
-      padding:26px 0;
+      padding:44px 0;
     }
     .services__row:first-child{padding-top:0;}
     .services__panel{
@@ -520,10 +522,10 @@
     .services__row-head{
       flex-direction:column;align-items:flex-start;gap:10px;
     }
-    .services__meta{width:100%;}
+    .services__meta{width:100%;justify-content:space-between;}
     .services__book{
       max-width:none !important;opacity:1 !important;
-      margin-left:14px !important;pointer-events:auto !important;
+      margin-left:0 !important;pointer-events:auto !important;
     }
   }
   @media (prefers-reduced-motion: reduce){
